@@ -1,0 +1,12 @@
+s = input()
+
+alphabets = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
+# 여러개의 테스트 케이스가 주어지므로, 각각을 처리합니다.
+result = ''
+for char in s:
+    # ///////////////////////////////////////////////////////////////////////////////////
+    int_val = alphabets.index(char) + 1
+    result += str(int_val) + ' '
+    # ///////////////////////////////////////////////////////////////////////////////////
+print(result)
