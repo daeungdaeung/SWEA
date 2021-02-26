@@ -11,38 +11,40 @@ for i in primes:
 # filter function은 첫번째 인자가 None이면 identity function으로 간주된다.
 # 즉, 데이터 값이 False가 아닌경우만 값이 담겨질 것이다.
 primes = list(filter(None, primes))
-"""
-에라토스테네스의 체에서 루트를 이용하여 소수가 될 수 있는 범위를 10^7 을 3162로 줄였고,
-3162개의 숫자에서 소수가 아닌 수를 제거한 후, 446개의 소수를 구하였다.  
-"""
+# """
+# 에라토스테네스의 체에서 루트를 이용하여 소수가 될 수 있는 범위를 10^7 을 3162로 줄였고,
+# 3162개의 숫자에서 소수가 아닌 수를 제거한 후, 446개의 소수를 구하였다.
+# 10^7 보다 작거나 혹은 같은 값인데, 446개의 소수로 나누어지지 않는 값이라면, 소수이다.
+# """
 
 T = int(input())
 # 출력해야할 모든 문자열들을 ans에 저장하고, 한번에 출력
 ans = []
 for test_case in range(1, T + 1):
     A = int(input())
-    sqr_A = A**0.5
     result = 1
-    # 소수로 주어진 수를 나누어 볼것
-    for prime in primes:
-        # 각 소수가 몇번 쓰였는지 확인
-        tmp = 0
-        # 주어진 소수로 나눌수 없거나, 주어진 수가 2보다 작 경우 while문 탈출
-        while A % prime == 0 and A >= 2:
-            A /= prime
-            tmp += 1
-        if tmp % 2 == 1:
-            result *= prime
-        # A < 2 -> 이때까지 나왔던 소수들을 활용하여 모두 나눌 수 있다는 의미이므로
-        # 뒤에 남아있는 소수는 신경쓸 필요 없다.
-        if A < 2:
-            break
-        # 우리가 가지고 있는 가장 큰 소수보다 크고, 또한 우리가 가지고 있는 모든 소수로 더이상 나누어지지 않는다면 그(A) 또한 소수이다.
-        # 그러므로 A > 3137 인 경우는 소수를 곱해서 반복문을 탈출한다.
-        if prime == primes[-1]:
-            if A > prime:
-                result *= A
+    # 완전 제곱수가 아닌경우
+    if A ** 0.5 != int(A ** 0.5):
+        # 소수로 주어진 수를 나누어 볼것
+        for prime in primes:
+            # 각 소수가 몇번 쓰였는지 확인
+            tmp = 0
+            # 주어진 소수로 나눌수 없거나, 주어진 수가 2보다 작 경우 while문 탈출
+            # 위 문장의 의미 -> 주어진 A는 primes 안에 속하는 소수로 표현 가능하다는 의미
+            while A % prime == 0:
+                # // 연산자를 사용 -> 몫을 활용하는 것
+                # / 연산자 사용 -> 나눗셈 활용시 정수형을 실수형으로 변환한다.
+                A //= prime
+                tmp += 1
+            if tmp % 2 == 1:
+                result *= prime
+            if A < 2 or A < prime:
                 break
+        if A > 1:
+            result *= A
+        # primes에 속하는 소수로 더이상 나누어지지 않는다면 그(A) 또한 소수이다.
+        # (A가 primes에 속하는 소수로 표현이 된다면 A => 1 이다. 아래 적힌 코드의 당위성 설명)
 
     ans.append('#{} {}'.format(test_case, int(result)))
-print(*ans, sep='\n')
+for _ in ans:
+    print(_)
